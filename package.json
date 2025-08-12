@@ -1,0 +1,16 @@
+{
+  "name": "trejo",
+  "version": "1.0.0",
+  "description": "mi primera app en node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+     "start": "node index.js",
+  "dev": "nodemon index.js"
+  },
+  "author": "joshoa trejo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
