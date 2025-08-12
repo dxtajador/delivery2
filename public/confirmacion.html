@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Confirmación | SpeedyDelivery</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <header class="header">
+    <h1>¡Pedido Confirmado!</h1>
+    <nav>
+      <a href="/" class="nav-link">Inicio</a>
+    </nav>
+  </header>
+
+  <main class="content">
+    <p>Gracias por tu compra. Tu pedido ha sido recibido y está en camino.</p>
+    <img src="img/confirmed.png" alt="Pedido confirmado" style="width: 100%; max-width: 400px; margin-top: 1rem;">
+    <a href="/" class="btn-primary">Volver al Inicio</a>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 SpeedyDelivery</p>
+  </footer>
+
+  <script>
+    // Limpia el carrito al confirmar el pedido
+    localStorage.removeItem('carrito');
+  </script>
+</body>
+</html>

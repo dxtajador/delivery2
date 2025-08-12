@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú | SpeedyDelivery</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <style>
+    /* Ajustes rápidos para un look más profesional */
+    .card-img-top {
+      object-fit: contain;
+      height: 180px;
+      padding: 10px;
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    .producto-card .card-title {
+      font-size: 0.9rem;
+    }
+    .producto-card .btn {
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body class="bg-light">
+
+  <!-- Header -->
+  <header class="bg-danger text-white p-3 mb-4 d-flex justify-content-between align-items-center">
+    <h1 class="h3 m-0">Menú</h1>
+    <nav>
+      <a href="/" class="btn btn-outline-light me-2">Inicio</a>
+      <a href="/carrito" class="btn btn-outline-light">Carrito</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Restaurantes -->
+    <section class="mb-5">
+      <h2 class="mb-4">Restaurantes</h2>
+      <div id="restaurantes" class="row g-4">
+        <div class="col-12 text-center">Cargando restaurantes...</div>
+      </div>
+    </section>
+
+    <!-- Productos individuales -->
+    <section>
+      <h2 class="mb-4">Productos individuales</h2>
+      <div id="productos-sueltos" class="row g-4">
+        <div class="col-12 text-center">Cargando productos...</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center p-3 mt-5">
+    <small>&copy; 2025 SpeedyDelivery - Todos los derechos reservados</small>
+  </footer>
+
+  <script>
+   const restaurantes = [
+    {
+      id: 'little_caesars',
+      nombre: 'Little Caesars',
+      img: 'img/little_caesars.jpg',
+      productos: [
+        { id: 'lc_pepperoni', nombre: 'Pizza Pepperoni', precio: 120, opciones: ['Personal', 'Mediana', 'Grande'] },
+        { id: 'lc_4quesos', nombre: 'Pizza 4 Quesos', precio: 130, opciones: ['Personal', 'Mediana', 'Grande'] },
+        { id: 'lc_veggie', nombre: 'Pizza Vegetariana', precio: 125, opciones: ['Personal', 'Mediana', 'Grande'] },
+      ],
+    },
+    {
+      id: 'mcdonalds',
+      nombre: "McDonald's",
+      img: 'img/mcdonalds.jpg',
+      productos: [
+        { id: 'mc_bigmac', nombre: 'Big Mac', precio: 90, opciones: [] },
+        { id: 'mc_mcnuggets', nombre: 'McNuggets 6 piezas', precio: 85, opciones: [] },
+        { id: 'mc_cuarto_libra', nombre: 'Cuarto de Libra', precio: 95, opciones: [] },
+      ],
+    },
+    {
+      id: 'kfc',
+      nombre: 'KFC',
+      img: 'img/kfc.jpg',
+      productos: [
+        { id: 'kfc_crispy', nombre: 'Pollo Crispy', precio: 110, opciones: ['2 piezas', '4 piezas', '8 piezas'] },
+        { id: 'kfc_bucket', nombre: 'Bucket Familiar', precio: 280, opciones: [] },
+        { id: 'kfc_wrap', nombre: 'Wrap de Pollo', precio: 75, opciones: [] },
+      ],
+    },
+    {
+      id: 'starbucks',
+      nombre: 'Starbucks',
+      img: 'img/starbucks.jpg',
+      productos: [
+        { id: 'sb_latte', nombre: 'Café Latte', precio: 65, opciones: ['Chico', 'Mediano', 'Grande'] },
+        { id: 'sb_frappe', nombre: 'Frappuccino', precio: 75, opciones: ['Chico', 'Mediano', 'Grande'] },
+        { id: 'sb_muffin', nombre: 'Muffin de Chocolate', precio: 45, opciones: [] },
+      ],
+    },
+    {
+      id: 'dominos',
+      nombre: "Domino's Pizza",
+      img: 'img/dominos.jpg',
+      productos: [
+        { id: 'dom_pepperoni', nombre: 'Pizza Pepperoni', precio: 140, opciones: ['Mediana', 'Grande', 'Familiar'] },
+        { id: 'dom_mexicana', nombre: 'Pizza Mexicana', precio: 150, opciones: ['Mediana', 'Grande', 'Familiar'] },
+        { id: 'dom_queso', nombre: 'Pizza Extra Queso', precio: 145, opciones: ['Mediana', 'Grande', 'Familiar'] },
+      ],
+    }
+  ];
+
+
+    const productosSueltos = [
+      { id: 'ensalada_ceasar', nombre: 'Ensalada César', precio: 60 },
+      { id: 'agua_500ml', nombre: 'Agua 500ml', precio: 15 },
+      { id: 'refresco_lata', nombre: 'Refresco lata', precio: 20 },
+      { id: 'papas_fritas', nombre: 'Papas Fritas', precio: 40 },
+    ];
+
+    const escapeHTML = (str) =>
+      str.replace(/&/g, '&amp;')
+         .replace(/</g, '&lt;')
+         .replace(/>/g, '&gt;')
+         .replace(/"/g, '&quot;')
+         .replace(/'/g, '&#39;');
+
+    const createProductHTML = (producto, restauranteId = null) => {
+      const opcionesHTML = producto.opciones?.length > 0
+        ? `<select class="form-select form-select-sm mb-2 opciones-select">
+            ${producto.opciones.map(opt => `<option>${escapeHTML(opt)}</option>`).join('')}
+           </select>`
+        : '';
+
+      return `
+        <div class="card producto-card h-100 shadow-sm">
+          <div class="card-body p-2">
+            <h6 class="card-title">${escapeHTML(producto.nombre)}</h6>
+            <p class="mb-1 text-muted">Precio: $${Number(producto.precio).toFixed(2)}</p>
+            ${opcionesHTML}
+            <button class="btn btn-danger btn-sm w-100 btn-agregar"
+                    data-id="${escapeHTML(producto.id)}"
+                    data-nombre="${escapeHTML(producto.nombre)}"
+                    data-precio="${producto.precio}"
+                    data-restaurante="${escapeHTML(restauranteId || 'sueltos')}">
+              Agregar
+            </button>
+          </div>
+        </div>`;
+    };
+
+    const renderRestaurants = (restaurantesDiv) => {
+      restaurantesDiv.innerHTML = restaurantes.map(rest => `
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card h-100 shadow-sm">
+            <img src="${escapeHTML(rest.img)}" class="card-img-top" alt="${escapeHTML(rest.nombre)}">
+            <div class="card-body">
+              <h5 class="card-title">${escapeHTML(rest.nombre)}</h5>
+              <div class="row g-2">
+                ${rest.productos.map(prod => `
+                  <div class="col-12 col-sm-6">
+                    ${createProductHTML(prod, rest.id)}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    const renderIndividualProducts = (productosDiv) => {
+      productosDiv.innerHTML = productosSueltos.map(prod => `
+        <div class="col-12 col-sm-6 col-lg-3">
+          ${createProductHTML(prod)}
+        </div>
+      `).join('');
+    };
+
+    const addToCart = (producto) => {
+      let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+      const index = carrito.findIndex(item => item.id === producto.id && item.opcion === producto.opcion);
+      if (index > -1) carrito[index].cantidad += 1;
+      else carrito.push(producto);
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+      alert(`Agregado: ${producto.nombre}`);
+    };
+
+    const setupEventListeners = () => {
+      document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('btn-agregar')) {
+          const btn = event.target;
+          const cardBody = btn.closest('.card-body');
+          const select = cardBody.querySelector('select.opciones-select');
+          const producto = {
+            id: btn.dataset.id,
+            nombre: btn.dataset.nombre,
+            precio: parseFloat(btn.dataset.precio),
+            restaurante: btn.dataset.restaurante,
+            opcion: select ? select.value : null,
+            cantidad: 1
+          };
+          addToCart(producto);
+        }
+      });
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderRestaurants(document.getElementById('restaurantes'));
+      renderIndividualProducts(document.getElementById('productos-sueltos'));
+      setupEventListeners();
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
